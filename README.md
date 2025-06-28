@@ -124,3 +124,46 @@ returns the following type
 }[]
 ```
 `pdf_path` relative path to a pdf or a empty string
+
+
+### Get Weather data
+> this is at least the options for category 2
+
+
+``` JavaScript
+const  station_list = await fetch(
+	"https://microservices.nuernberg.de/umweltdaten/api/umweltdaten/get_stations/",
+	{
+		method: 'POST',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(
+			// by yesterday
+			{ cat: cat_id,type: station_code, measure: string, date_yesterday: date}
+			// or by count of days ( 1, 7, 30 )
+			{ cat: cat_id,type: station_code, measure: string, days: 1 || 7 || 30 }
+			// or by timespan ( increment page every 5000 results )
+			{ cat: cat_id,type: station_code, measure: string, date1: "yyyy-mm-dd",
+			 date2: "yyyy-mm-dd", page: number }
+		)
+	}
+).then(res  =>  res.json());
+```
+returns the following type
+```
+{
+	// if success == 1; request was successfull
+	success: number,
+	// if result paginates, count of pages, else 0
+	pages: number
+	message: {
+		// temperature in °C
+		temperature: "AB.BC"; 
+		date_entry: "DD.MM.YYYY HH:mm"
+	}[]
+}
+
+```
+
